@@ -7,13 +7,14 @@
     using QuizSystemWeb.Data;
     using QuizSystemWeb.Data.Entities;
     using System;
+    using System.Linq;
     using System.Threading.Tasks;
+
+    using static Areas.Admin.AdministratorConstants;
 
     public static class ApplicationBuilderExtensions
     {
-        public const string AreaName = "Admin";
-
-        public const string AdministratorRoleName = "Administrator";
+        
 
         public static IApplicationBuilder PrepareDatabase(
            this IApplicationBuilder app)
@@ -24,6 +25,7 @@
 
             MigrateDatabase(services);
 
+            SeedQuestionTypes(services);
             SeedAdministrator(services);
             SeedUser(services);
 
@@ -37,7 +39,32 @@
             data.Database.Migrate();
         }
 
-        private static void SeedAdministrator(IServiceProvider services)
+        private static void SeedQuestionTypes(IServiceProvider services)
+        {
+            var data = services.GetRequiredService<ApplicationDbContext>();
+
+            if (data.QuestionsTypes.Any())
+            {
+                return;
+            }
+
+            data.QuestionsTypes.AddRange(new[]
+             {
+                new QuestionType()
+                {
+                    TypeName="Closed"
+                },
+                new QuestionType()
+                {
+                    TypeName="Opened"
+                }
+              });
+
+            data.SaveChanges();
+
+        }
+
+            private static void SeedAdministrator(IServiceProvider services)
         {
             var userManager = services.GetRequiredService<UserManager<User>>();
             var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();

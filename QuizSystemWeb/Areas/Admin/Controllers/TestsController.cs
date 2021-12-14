@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using QuizSystemWeb.Services.Tests;
-using System;
-using System.Globalization;
-
-namespace QuizSystemWeb.Areas.Administrator.Controllers
+﻿namespace QuizSystemWeb.Areas.Admin.Controllers
 {
+   using Microsoft.AspNetCore.Mvc;
+   using QuizSystemWeb.Infrastructure;
+   using QuizSystemWeb.Services.Tests;
+   using System;
+   using System.Globalization;
+
     public class TestsController : AdministratorController
     {
         private readonly ITestService service;
@@ -22,13 +23,13 @@ namespace QuizSystemWeb.Areas.Administrator.Controllers
         [HttpPost]
         public IActionResult Create(string title, string startDate, string endDate, string duration)
         {
-            var authorId = "338f72d9-5d40-4f10-9890-fad77ff9f298";
+            var authorId = this.User.Id();
             var start = DateTime.ParseExact(startDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
             var end = DateTime.ParseExact(endDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
             var dur = TimeSpan.Parse(duration);
 
             service.Create(title, start, end, dur, authorId);
-            return View();
+            return RedirectToAction("Index","Administrator");
         }
     }
 }

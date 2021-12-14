@@ -12,6 +12,7 @@ namespace QuizSystemWeb
     using QuizSystemWeb.Data;
     using QuizSystemWeb.Data.Entities;
     using QuizSystemWeb.Infrastructure;
+    using QuizSystemWeb.Services.Questions;
     using QuizSystemWeb.Services.Tests;
 
     public class Startup
@@ -28,7 +29,7 @@ namespace QuizSystemWeb
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DockerConnection")));
+                    Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services
@@ -45,6 +46,7 @@ namespace QuizSystemWeb
             services.AddControllersWithViews();
 
             services.AddTransient<ITestService, TestService>();
+            services.AddTransient<IQuestionService, QuestionService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
