@@ -12,6 +12,7 @@ namespace QuizSystemWeb
     using QuizSystemWeb.Data;
     using QuizSystemWeb.Data.Entities;
     using QuizSystemWeb.Infrastructure;
+    using QuizSystemWeb.Services.Answers;
     using QuizSystemWeb.Services.Questions;
     using QuizSystemWeb.Services.Tests;
 
@@ -47,6 +48,7 @@ namespace QuizSystemWeb
 
             services.AddTransient<ITestService, TestService>();
             services.AddTransient<IQuestionService, QuestionService>();
+            services.AddTransient<IAnswerService, AnswerService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

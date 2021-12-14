@@ -1,0 +1,32 @@
+﻿@model TestServiceDetailsModel
+
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Start</th>
+            <th scope="col">End</th>
+            <th scope="col">Duration</th>
+            <th scope="col">IsActive</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+     
+            <tr>
+                <td scope="col">@Model.Name</td>
+                <td scope="col">@Model.StartDate</td>
+                <td scope="col">@Model.EndDate</td>
+                <td scope="col">@Model.Duration</td>
+                <td scope="col">@Model.IsActive</td>
+
+
+                <td scope="col">
+                    @*<a asp-controller="Reports" asp-action="Delete" asp-route-id="@report.Id" class="btn btn-danger float-right ml-3">Delete</a>*@
+                    <a asp-controller="Questions" asp-action="Create" asp-route-id="@Model.Id" class="btn btn-primary float-right ml-3">Add Question</a>
+                </td>
+            </tr>
+        
+    </tbody>
+</table>

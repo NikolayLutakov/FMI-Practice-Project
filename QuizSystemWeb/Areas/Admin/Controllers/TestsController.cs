@@ -3,6 +3,7 @@
    using Microsoft.AspNetCore.Mvc;
    using QuizSystemWeb.Infrastructure;
    using QuizSystemWeb.Services.Tests;
+   using QuizSystemWeb.Services.Tests.Models;
    using System;
    using System.Globalization;
 
@@ -31,5 +32,22 @@
             service.Create(title, start, end, dur, authorId);
             return RedirectToAction("Index","Administrator");
         }
+
+        public IActionResult All()
+        {
+            var allTests = this.service.GetAllTests();
+
+            return View(allTests);
+        }
+
+        public IActionResult Details(int id)
+        {
+            var test = this.service.Details(id);
+
+            return View(test);
+
+        }
+
+
     }
 }
