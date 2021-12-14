@@ -1,8 +1,8 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace QuizSystemWeb.Data.Migrations
+﻿namespace QuizSystemWeb.Data.Migrations
 {
+    using System;
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class AnswersQuestionsQuestionsTypesTestsUsersAnswersTables : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

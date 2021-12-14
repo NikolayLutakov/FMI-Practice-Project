@@ -6,9 +6,7 @@
 
     public class ApplicationDbContext : IdentityDbContext<User>
     {
-        
-
-
+      
          public DbSet<Answer> Answers { get; set; }
          public DbSet<Question> Questions { get; set; }
          public DbSet<QuestionType> QuestionsTypes { get; set; }
@@ -19,7 +17,6 @@
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
-
 
         }
 
