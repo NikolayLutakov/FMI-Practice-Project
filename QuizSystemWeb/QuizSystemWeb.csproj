@@ -14,4 +14,10 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\Administrator\Models\" />
+    <Folder Include="Areas\Administrator\Views\Shared\" />
+    <Folder Include="Services\Tests\Models\" />
+  </ItemGroup>
+
 </Project>

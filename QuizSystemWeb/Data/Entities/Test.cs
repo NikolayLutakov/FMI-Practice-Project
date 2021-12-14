@@ -20,6 +20,8 @@
 
         public TimeSpan Duration { get; set; }
 
+        public bool IsActive { get; set; }
+
         [Required]
         public string AuthorId { get; set; }
 

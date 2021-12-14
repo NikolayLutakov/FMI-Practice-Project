@@ -12,6 +12,7 @@ namespace QuizSystemWeb
     using QuizSystemWeb.Data;
     using QuizSystemWeb.Data.Entities;
     using QuizSystemWeb.Infrastructure;
+    using QuizSystemWeb.Services.Tests;
 
     public class Startup
     {
@@ -27,7 +28,7 @@ namespace QuizSystemWeb
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    Configuration.GetConnectionString("DockerConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services
@@ -41,10 +42,9 @@ namespace QuizSystemWeb
                .AddRoles<IdentityRole>()
                .AddEntityFrameworkStores<ApplicationDbContext>();
 
-
-            //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-            //    .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
+
+            services.AddTransient<ITestService, TestService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -72,9 +72,15 @@ namespace QuizSystemWeb
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+               name: "Areas",
+               pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
+
+
             });
         }
     }
