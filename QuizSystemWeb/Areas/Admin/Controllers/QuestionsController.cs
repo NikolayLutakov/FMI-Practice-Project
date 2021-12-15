@@ -48,8 +48,9 @@
                 Id = id,
                 Content = question.Content,
                 Points = question.Points,
+                TypesList= this.questionService.GetQuestionTypes()
 
-            };
+        };
 
 
             return View(questionDto);

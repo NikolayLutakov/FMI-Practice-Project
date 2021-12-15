@@ -1,26 +1,16 @@
 ﻿@model QuestionFormModel
 
-<h1>Create Question</h1>
 
-<form method="post">
-    <input type="hidden" id="testId" name="testId" value=@Model.TestId>
-    <div class="form-group">
-        <label asp-for="@Model.Content"></label>
-        <input class="form-control" asp-for="@Model.Content">
-    </div>
-    <div class="form-group">
-        <label asp-for="@Model.Points"></label>
-        <input class="form-control" asp-for="@Model.Points">
-    </div>
-    <div class="form-group">
-        <label asp-for="@Model.QuestionType">Type select</label>
-        <select asp-for="@Model.QuestionType" class="form-control">
-            <option value="">--Select--</option>
-            @foreach (var type in Model.TypesList)
-            {
-             <option value="@type.Id">@type.Name</option>
-            }
-        </select>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+@{
+  ViewData["Title"]="Create Question";
+}
+
+<h2 class="text-center text-primary">@ViewData["Title"]</h2>
+
+<div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+    <partial name="_QuestionFormPartial" model="@Model" />
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -15,8 +15,7 @@
 
         public IActionResult Create(int id)
         {
-            ViewBag.QuestionId = id;
-            return View();
+            return View(new AnswerFormViewModel() { QuestionId=id});
         }
 
         [HttpPost]

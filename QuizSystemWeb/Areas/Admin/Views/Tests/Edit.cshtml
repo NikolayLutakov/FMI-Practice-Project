@@ -1,24 +1,15 @@
 ﻿@model TestFormModel
 
-<h1>Edit test</h1>
+@{
+    ViewData["Title"] = "Edit Test";
+}
 
-<form method="post">
-    <div class="form-group">
-        <label asp-for="@Model.Name"></label>
-        <input class="form-control" asp-for="@Model.Name" >
-    </div>
-    <div class="form-group">
-        <label asp-for="@Model.StartDate"></label>
-        <input class="form-control" asp-for="@Model.StartDate" >
-    </div>
-    <div class="form-group">
-        <label asp-for="@Model.EndDate"></label>
-        <input class="form-control" asp-for="@Model.EndDate" >
-    </div>
-    <div class="form-group">
-        <label asp-for="@Model.Duration"></label>
-        <input class="form-control" asp-for="@Model.Duration">
-    </div>
+<h2 class="text-center text-primary">@ViewData["Title"]</h2>
 
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+<div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+    <partial name="_TestFormPartial" model="@Model" />
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

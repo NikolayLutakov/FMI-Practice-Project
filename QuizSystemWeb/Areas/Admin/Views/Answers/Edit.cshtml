@@ -1,18 +1,15 @@
 ﻿@model AnswerFormViewModel
-<h1>Edit Answer</h1>
 
-<form method="post">
-    <input type="hidden" value="@Model.QuestionId" name="QuestionId"/>
-    <div class="form-group">
-        <label for="Content">Content</label>
-        <input type="text" class="form-control" id="content" name="content" placeholder="Enter content" value="@Model.Content">
-    </div>
-    <div class="form-group">
-        <label for="IsCorrect">Is Correct</label>
-        <select class="form-control" id="IsCorrect" name="IsCorrect">
-            <option value="@Convert.ToBoolean(1)">Yes</option>
-            <option value="@Convert.ToBoolean(0)">No</option>
-        </select>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+@{
+    ViewData["Title"] = "Edit Answer";
+}
+
+<h2 class="text-center text-primary">@ViewData["Title"]</h2>
+
+<div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+    <partial name="_AnswerFormPartial" model="@Model" />
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
