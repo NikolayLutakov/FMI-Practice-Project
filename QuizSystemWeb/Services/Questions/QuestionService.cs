@@ -40,8 +40,10 @@
         public bool Edit(int questionId, string content, int questionType,int points)
         {
             var question = data.Questions.Where(x => x.Id == questionId).FirstOrDefault();
-          
-            if(question.QuestionTypeId != questionType && questionType == 2)
+
+            var questionTypeId = this.data.QuestionsTypes.FirstOrDefault(x => x.TypeName == "Opened").Id;
+
+            if(questionType == questionTypeId)
             {
                 answerService.Delete(questionId);
             }
@@ -99,7 +101,11 @@
                     Answers = x.Answers.Select(a => new AnswerDetailsServiceModel{
                         Id = a.Id,
                         Content = a.Content,
-                        IsCorrect = a.IsCorrect
+                        IsCorrect = new AnswerSignificanceServiceModel() 
+                        {
+                            Name=a.IsCorrect.Name,
+                            Value=a.IsCorrect.Value,
+                        }
                     })
                     .ToList(),
                     TestId = x.TestId

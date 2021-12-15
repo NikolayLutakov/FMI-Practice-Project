@@ -12,6 +12,12 @@
 
         }
 
+        public class AnswerSignificance
+        {
+            public const int NameMaxLength = 3;
+
+        }
+
         public class Question
         {
             public const int ContentMinLength = 10;

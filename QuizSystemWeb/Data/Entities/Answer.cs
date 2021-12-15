@@ -12,11 +12,15 @@
         [MaxLength(ContentMaxLength)]
         public string Content { get; set; }
 
-        public bool IsCorrect { get; set; }
+        public int IsCorrectId { get; set; }
+
+        public AnswerSignificance IsCorrect { get; set; }
 
         public int QuestionId { get; set; }
 
         public virtual Question Question { get; set; }
+
+        
         
 
     }

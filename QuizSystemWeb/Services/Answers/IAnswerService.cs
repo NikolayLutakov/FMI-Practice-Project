@@ -1,5 +1,6 @@
 ﻿namespace QuizSystemWeb.Services.Answers
 {
+    using QuizSystemWeb.Data.Entities;
     using QuizSystemWeb.Services.Answers.Models;
     using System;
     using System.Collections.Generic;
@@ -15,5 +16,7 @@
         bool Delete(int questionId);
 
         AnswerDetailsServiceModel GetById(int id);
+
+        ICollection<AnswerSignificanceServiceModel> GetAnswerSignificances();
     }
 }

@@ -24,7 +24,7 @@
             var services = serviceScope.ServiceProvider;
 
             MigrateDatabase(services);
-
+            SeedAnswerSignificances(services);
             SeedQuestionTypes(services);
             SeedAdministrator(services);
             SeedUser(services);
@@ -37,6 +37,33 @@
             var data = services.GetRequiredService<ApplicationDbContext>();
 
             data.Database.Migrate();
+        }
+
+        private static void SeedAnswerSignificances(IServiceProvider services)
+        {
+            var data = services.GetRequiredService<ApplicationDbContext>();
+
+            if (data.AnswerSignificances.Any())
+            {
+                return;
+            }
+
+            data.AnswerSignificances.AddRange(new[]
+             {
+                new AnswerSignificance()
+                {
+                    Name="Yes",
+                    Value=true
+                },
+                new AnswerSignificance()
+                {
+                    Name="No",
+                    Value=false
+                }
+              });
+
+            data.SaveChanges();
+
         }
 
         private static void SeedQuestionTypes(IServiceProvider services)

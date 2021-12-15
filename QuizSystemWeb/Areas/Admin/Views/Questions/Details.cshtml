@@ -41,7 +41,7 @@
         {
             <tr>
             <td scope="col">@answer.Content</td>
-            <td scope="col">@answer.IsCorrect</td>
+            <td scope="col">@answer.IsCorrect.Name</td>
             <td scope="col">
                <a asp-controller="Answers" asp-action="Edit" asp-route-id="@answer.Id" class="btn alert-warning float-right ml-3">Edit Answer</a>
             </td>

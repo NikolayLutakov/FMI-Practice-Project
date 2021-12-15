@@ -8,6 +8,7 @@
     {
       
          public DbSet<Answer> Answers { get; set; }
+         public DbSet<AnswerSignificance> AnswerSignificances { get; set; }
          public DbSet<Question> Questions { get; set; }
          public DbSet<QuestionType> QuestionsTypes { get; set; }
          public DbSet<Test> Tests { get; set; }

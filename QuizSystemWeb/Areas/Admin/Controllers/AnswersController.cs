@@ -15,7 +15,11 @@
 
         public IActionResult Create(int id)
         {
-            return View(new AnswerFormViewModel() { QuestionId=id});
+            var choicesList = answerService.GetAnswerSignificances();
+            return View(new AnswerFormViewModel()
+            { QuestionId=id , 
+              ChoicesList=answerService.GetAnswerSignificances()
+            });
         }
 
         [HttpPost]
@@ -26,16 +30,14 @@
                 return View(model);
             }
 
-            var questionId = model.QuestionId;
-            var content = model.Content;
-            var isCorrect = model.IsCorrect;
+            
 
-            if (!(answerService.Create(questionId, content, isCorrect)))
+            if (!(answerService.Create(model.QuestionId, model.Content, model.IsCorrect)))
             {
                 return BadRequest();
             }
            
-            return RedirectToAction("Details", "Questions", new { Id = questionId });
+            return RedirectToAction("Details", "Questions", new { Id = model.QuestionId });
         }
 
         public IActionResult Edit(int id)
@@ -45,8 +47,9 @@
             {
                 Id = answer.Id,
                 Content = answer.Content,
-                IsCorrect = answer.IsCorrect,
-                QuestionId = answer.QuestionId
+                IsCorrect = answer.IsCorrect.Value,
+                QuestionId = answer.QuestionId,
+                ChoicesList = answerService.GetAnswerSignificances()
             };
 
             return View(model);
