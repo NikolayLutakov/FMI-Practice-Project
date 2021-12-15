@@ -17,11 +17,34 @@
             this.data = data;
         }
 
-        public void Create(string title, DateTime startDate, DateTime endDate, TimeSpan duration, string authorId)
+        public bool ChangeVisibility(int id)
         {
+            var test = data.Tests.FirstOrDefault(x => x.Id == id);
+
+            if (test==null)
+            {
+                return false;
+            }
+
+            test.IsActive= !test.IsActive;
+
+            data.Tests.Update(test);
+
+            data.SaveChanges();
+
+            return true;
+        }
+
+        public bool Create(string name, DateTime startDate, DateTime endDate, TimeSpan duration, string authorId)
+        {
+            if (startDate.CompareTo(endDate) != -1)
+            {
+                return false;
+            }
+
             var test = new Test
             {
-                Name = title,
+                Name = name,
                 StartDate = startDate,
                 EndDate = endDate,
                 Duration = duration,
@@ -31,6 +54,8 @@
 
             data.Tests.Add(test);
             data.SaveChanges();
+
+            return true;
         }
 
         public TestServiceDetailsModel Details(int id)
@@ -40,8 +65,8 @@
                 {
                     Id = x.Id,
                     Name = x.Name,
-                    StartDate = x.StartDate.ToString("d"),
-                    EndDate = x.EndDate.ToString("d"),
+                    StartDate = x.StartDate.ToString("MM/dd/yyyy"),
+                    EndDate = x.EndDate.ToString("MM/dd/yyyy"),
                     Duration = x.Duration.ToString(),
                     IsActive = x.IsActive,
                     AuthorId = x.AuthorId,
@@ -49,19 +74,35 @@
                     Questions = x.Questions.Select(q => new QuestionServiceModel
                     {
                         Id = q.Id,
-                        Content = q.Content,
-                        //Points = q.Points,
-                        //QuestionType = q.QuestionType,
-                        //Answers = q.Answers,
-                        //TestId = q.TestId
+                        Content = q.Content
                     })
                     .ToList()
                 })
                 .FirstOrDefault(x => x.Id == id);
 
-            //TODO:Questions model
-
+            
             return test;
+        }
+
+        public bool Edit(int id,string name, DateTime startDate, DateTime endDate, TimeSpan duration)
+        {
+            var test = data.Tests.FirstOrDefault(x => x.Id == id);
+
+            if (test == null || startDate.CompareTo(endDate) != -1)
+            {
+                return false;
+            }
+
+            test.Name = name;
+            test.StartDate = startDate;
+            test.EndDate = endDate;
+            test.Duration = duration;
+
+            data.Update(test);
+
+            data.SaveChanges();
+
+            return true;
         }
 
         public IEnumerable<TestServiceModel> GetAllTests()

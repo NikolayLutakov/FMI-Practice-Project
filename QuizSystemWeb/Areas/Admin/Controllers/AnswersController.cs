@@ -31,7 +31,7 @@
             var content = model.Content;
             var isCorrect = model.IsCorrect;
 
-            if (answerService.Create(questionId, content, isCorrect) != "OK")
+            if (!(answerService.Create(questionId, content, isCorrect)))
             {
                 return BadRequest();
             }
@@ -65,7 +65,7 @@
             var content = model.Content;
             var isCorrect = model.IsCorrect;
 
-            if (answerService.Edit(answerId, content, isCorrect) != "OK")
+            if (!(answerService.Edit(answerId, content, isCorrect)))
             {
                 return BadRequest();
             }

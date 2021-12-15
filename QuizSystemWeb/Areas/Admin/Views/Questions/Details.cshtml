@@ -14,9 +14,14 @@
         <tr>
             <td scope="col">@Model.Content</td>
             <td scope="col">@Model.Points</td>
-            <td scope="col">@Model.QuestionType.TypeName</td>
+            <td scope="col">@Model.QuestionType</td>
             <td scope="col">
-               <a asp-controller="Answers" asp-action="Create" asp-route-id="@Model.Id" class="btn btn-primary float-right ml-3">Add Answer</a>
+               
+                @if (Model.QuestionType == "Closed")
+                {
+                    <a asp-controller="Answers" asp-action="Create" asp-route-id="@Model.Id" class="btn btn-primary float-right ml-3">Add Answer</a>
+                }
+                <a asp-controller="Questions" asp-action="Edit" asp-route-id="@Model.Id" class="btn alert-warning float-right ml-3">Edit Question</a>
             </td>
         </tr>
 

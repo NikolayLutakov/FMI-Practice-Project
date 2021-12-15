@@ -13,7 +13,7 @@
 
         public int QuestionTypeId { get; set; }
 
-        public virtual QuestionType QuestionType { get; set; }
+        public string QuestionType { get; set; }
 
         public int TestId { get; set; }
 

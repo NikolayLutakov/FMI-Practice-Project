@@ -17,14 +17,14 @@
             this.data = data;
         }
 
-        public string Create(int questionId, string content, bool IsCorrect)
+        public bool Create(int questionId, string content, bool IsCorrect)
         {
             if (IsCorrect == true)
             {
                 var questionAnswers = data.Answers.Where(x => x.QuestionId == questionId).Any(x => x.IsCorrect == true);
                 if (questionAnswers)
                 {
-                    return "Can't add multiple correct answers!";
+                    return false;
                 }
             }
 
@@ -39,10 +39,21 @@
 
             data.SaveChanges();
 
-            return "OK";
+            return true;
         }
 
-        public string Edit(int answerId, string content, bool IsCorrect)
+        public bool Delete(int questionId)
+        {
+            var answers = data.Answers.Where(x => x.QuestionId == questionId);
+
+            data.Answers.RemoveRange(answers);
+
+            data.SaveChanges();
+
+            return true;
+        }
+
+        public bool Edit(int answerId, string content, bool IsCorrect)
         {
             var answer = data.Answers.Where(x => x.Id == answerId).FirstOrDefault();
             if(IsCorrect == true)
@@ -50,7 +61,7 @@
                 var questionAnswers = data.Answers.Where(x => x.QuestionId == answer.QuestionId && x.Id != answerId).Any(x => x.IsCorrect == true);
                 if (questionAnswers)
                 {
-                    return "Can't add multiple correct answers!";
+                    return false;
                 }
             }
             answer.Content = content;
@@ -60,7 +71,7 @@
 
             data.Update(answer);
             data.SaveChanges();
-            return "OK";
+            return true;
         }
 
         public AnswerDetailsServiceModel GetById(int id)

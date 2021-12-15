@@ -8,9 +8,11 @@
 
     public interface IAnswerService
     {
-        string Create(int questionId, string content, bool IsCorrect);
+        bool Create(int questionId, string content, bool IsCorrect);
 
-        string Edit(int answerId, string content, bool IsCorrect);
+        bool Edit(int answerId, string content, bool IsCorrect);
+
+        bool Delete(int questionId);
 
         AnswerDetailsServiceModel GetById(int id);
     }

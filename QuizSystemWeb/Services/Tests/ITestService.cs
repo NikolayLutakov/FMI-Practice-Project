@@ -6,7 +6,11 @@
 
     public interface ITestService
     {
-        void Create(string title, DateTime startDate, DateTime endDate, TimeSpan duration, string authorId);
+        bool Create(string name, DateTime startDate, DateTime endDate, TimeSpan duration, string authorId);
+
+        bool Edit(int id,string name, DateTime startDate, DateTime endDate, TimeSpan duration);
+
+        bool ChangeVisibility(int id);
 
         IEnumerable<TestServiceModel> GetAllTests();
 

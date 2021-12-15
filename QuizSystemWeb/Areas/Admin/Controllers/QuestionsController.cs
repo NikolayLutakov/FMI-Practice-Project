@@ -1,6 +1,7 @@
 ﻿namespace QuizSystemWeb.Areas.Admin.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+    using QuizSystemWeb.Areas.Admin.Models.Question;
     using QuizSystemWeb.Services.Questions;
     using System;
     using System.Collections.Generic;
@@ -18,16 +19,17 @@
 
         public IActionResult Create(int id)
         {
-            ViewBag.TestId = id;
-            return View();
+            var questionTypes = this.questionService.GetQuestionTypes();
+
+            return View(new QuestionFormModel() { TestId=id , TypesList=questionTypes});
         }
 
         [HttpPost]
-        public IActionResult Create(int testId,string content,int points,int questionType)
+        public IActionResult Create(QuestionFormModel model)
         {
-            questionService.Create(content, points, questionType, testId);
+            questionService.Create(model.Content, model.Points, model.QuestionType, model.TestId);
 
-            return RedirectToAction("Index", "Administrator");
+            return RedirectToAction("Details", "Tests",new { Id=model.TestId });
         }
 
         public IActionResult Details(int id)
@@ -35,6 +37,40 @@
             var model = questionService.GetQuestionById(id);
 
             return View(model);
+        }
+
+        public IActionResult Edit(int id)
+        {
+            var question = questionService.GetQuestionById(id);
+
+            var questionDto = new QuestionFormModel
+            {
+                Id = id,
+                Content = question.Content,
+                Points = question.Points,
+
+            };
+
+
+            return View(questionDto);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(QuestionFormModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            if (!(questionService.Edit(model.Id, model.Content, model.QuestionType,model.Points)))
+            {
+                return BadRequest();
+            }
+            ;
+            return RedirectToAction("Details", "Questions", new { id = model.Id });
+
+
         }
 
     }

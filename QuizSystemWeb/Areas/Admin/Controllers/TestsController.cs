@@ -1,7 +1,8 @@
 ﻿namespace QuizSystemWeb.Areas.Admin.Controllers
 {
    using Microsoft.AspNetCore.Mvc;
-   using QuizSystemWeb.Infrastructure;
+    using QuizSystemWeb.Areas.Admin.Models.Test;
+    using QuizSystemWeb.Infrastructure;
    using QuizSystemWeb.Services.Tests;
    using QuizSystemWeb.Services.Tests.Models;
    using System;
@@ -22,15 +23,12 @@
         }
 
         [HttpPost]
-        public IActionResult Create(string title, string startDate, string endDate, string duration)
+        public IActionResult Create(TestFormModel model)
         {
             var authorId = this.User.Id();
-            var start = DateTime.ParseExact(startDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
-            var end = DateTime.ParseExact(endDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
-            var dur = TimeSpan.Parse(duration);
 
-            service.Create(title, start, end, dur, authorId);
-            return RedirectToAction("Index","Administrator");
+            service.Create(model.Name, model.StartDate, model.EndDate, model.Duration, authorId);
+            return RedirectToAction("All");
         }
 
         public IActionResult All()
@@ -45,6 +43,53 @@
             var test = this.service.Details(id);
 
             return View(test);
+
+        }
+
+        public IActionResult Edit(int id)
+        {
+            var test = this.service.Details(id);
+
+            var testDto = new TestFormModel
+            {
+                Id=test.Id,
+                Name = test.Name,
+                StartDate = DateTime.ParseExact(test.StartDate, "MM/dd/yyyy", CultureInfo.InvariantCulture),
+                EndDate = DateTime.ParseExact(test.EndDate, "MM/dd/yyyy", CultureInfo.InvariantCulture),
+                Duration = TimeSpan.Parse(test.Duration),
+            };
+
+
+            return View(testDto);
+        }
+
+
+        [HttpPost]
+        public IActionResult Edit(TestFormModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            if (!(service.Edit(model.Id, model.Name, model.StartDate,model.EndDate,model.Duration)))
+            {
+                return BadRequest();
+            }
+            ;
+            return RedirectToAction("Details", "Tests", new { id = model.Id });
+
+        }
+
+        public IActionResult ChangeVisibility(int id)
+        {
+            if (!this.service.ChangeVisibility(id))
+            {
+                return NotFound();
+            }
+
+
+            return RedirectToAction("Details",new {id});
 
         }
 
