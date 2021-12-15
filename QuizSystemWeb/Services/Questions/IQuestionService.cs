@@ -1,13 +1,15 @@
 ﻿namespace QuizSystemWeb.Services.Questions
 {
-    using System;
+    using QuizSystemWeb.Services.Questions.Models;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-
+   
     public interface IQuestionService
     {
         void Create(string content, int points, int questionTypeId, int testId);
-        
+
+        ICollection<QuestionServiceModel> GetAllQuestions(int testId);
+
+        QuestionDetailsServiceModel GetQuestionById(int questionId);
+
     }
 }

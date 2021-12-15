@@ -2,6 +2,7 @@
 {
     using QuizSystemWeb.Data;
     using QuizSystemWeb.Data.Entities;
+    using QuizSystemWeb.Services.Questions.Models;
     using QuizSystemWeb.Services.Tests.Models;
     using System;
     using System.Collections.Generic;
@@ -36,16 +37,25 @@
         {
             var test = data.Tests
                 .Select(x => new TestServiceDetailsModel
-              {
-                Id = x.Id,
-                Name = x.Name,
-                StartDate = x.StartDate.ToString("d"),
-                EndDate = x.EndDate.ToString("d"),
-                Duration = x.Duration.ToString(),
-                IsActive = x.IsActive,
-                AuthorId = x.AuthorId,
-                Author = x.Author,
-                Questions = x.Questions
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    StartDate = x.StartDate.ToString("d"),
+                    EndDate = x.EndDate.ToString("d"),
+                    Duration = x.Duration.ToString(),
+                    IsActive = x.IsActive,
+                    AuthorId = x.AuthorId,
+                    Author = x.Author,
+                    Questions = x.Questions.Select(q => new QuestionServiceModel
+                    {
+                        Id = q.Id,
+                        Content = q.Content,
+                        //Points = q.Points,
+                        //QuestionType = q.QuestionType,
+                        //Answers = q.Answers,
+                        //TestId = q.TestId
+                    })
+                    .ToList()
                 })
                 .FirstOrDefault(x => x.Id == id);
 
@@ -58,7 +68,7 @@
         {
             var allTests = data.Tests.Select(x => new TestServiceModel
             {
-                Id=x.Id,
+                Id = x.Id,
                 Name = x.Name,
             })
               .ToList();

@@ -1,6 +1,7 @@
 ﻿namespace QuizSystemWeb.Services.Tests.Models
 {
     using QuizSystemWeb.Data.Entities;
+    using QuizSystemWeb.Services.Questions.Models;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -24,7 +25,7 @@
 
         public virtual User Author { get; set; }
 
-        public virtual ICollection<Question> Questions { get; set; }
-     = new HashSet<Question>();
+        public virtual ICollection<QuestionServiceModel> Questions { get; set; }
+     
     }
 }

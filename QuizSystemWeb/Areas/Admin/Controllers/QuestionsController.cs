@@ -16,8 +16,9 @@
             this.questionService = questionService;
         }
 
-        public IActionResult Create()
+        public IActionResult Create(int id)
         {
+            ViewBag.TestId = id;
             return View();
         }
 
@@ -27,6 +28,13 @@
             questionService.Create(content, points, questionType, testId);
 
             return RedirectToAction("Index", "Administrator");
+        }
+
+        public IActionResult Details(int id)
+        {
+            var model = questionService.GetQuestionById(id);
+
+            return View(model);
         }
 
     }

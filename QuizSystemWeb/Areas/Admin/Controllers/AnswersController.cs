@@ -1,13 +1,10 @@
 ﻿namespace QuizSystemWeb.Areas.Admin.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+    using QuizSystemWeb.Areas.Admin.Models.Answer;
     using QuizSystemWeb.Services.Answers;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
 
-    public class AnswersController:AdministratorController
+    public class AnswersController : AdministratorController
     {
         private readonly IAnswerService answerService;
 
@@ -16,17 +13,64 @@
             this.answerService = answerService;
         }
 
-        public IActionResult Create()
+        public IActionResult Create(int id)
         {
+            ViewBag.QuestionId = id;
             return View();
         }
 
         [HttpPost]
-        public IActionResult Create(int questionId,string content,bool IsCorrect)
+        public IActionResult Create(AnswerFormViewModel model)
         {
-            answerService.Create(questionId, content, IsCorrect);
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
 
-            return RedirectToAction("Index","Administrator");
+            var questionId = model.QuestionId;
+            var content = model.Content;
+            var isCorrect = model.IsCorrect;
+
+            if (answerService.Create(questionId, content, isCorrect) != "OK")
+            {
+                return BadRequest();
+            }
+           
+            return RedirectToAction("Details", "Questions", new { Id = questionId });
+        }
+
+        public IActionResult Edit(int id)
+        {
+            var answer = answerService.GetById(id);
+            var model = new AnswerFormViewModel
+            {
+                Id = answer.Id,
+                Content = answer.Content,
+                IsCorrect = answer.IsCorrect,
+                QuestionId = answer.QuestionId
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(AnswerFormViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var answerId = model.Id;
+            var content = model.Content;
+            var isCorrect = model.IsCorrect;
+
+            if (answerService.Edit(answerId, content, isCorrect) != "OK")
+            {
+                return BadRequest();
+            }
+            ;
+            return RedirectToAction("Details", "Questions", new { id = model.QuestionId });
         }
 
     }
