@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<ActiveTestsListingServiceModel>
 <h1>User Index</h1>
 
+<a asp-controller="Tests" asp-action="Completed" class="btn btn-success float-right ml-3 mb-3">Completed Tests</a>
 <table class="table">
     <thead class="thead-dark">
         <tr>
@@ -21,7 +22,10 @@
                 <td scope="col">@test.Duration.Remove(@test.Duration.IndexOf("."), @test.Duration.Length - @test.Duration.IndexOf("."))</td>
                 <td scope="col">
                     @*<a asp-controller="Reports" asp-action="Delete" asp-route-id="@report.Id" class="btn btn-danger float-right ml-3">Delete</a>*@
-                   <a asp-controller="Tests" asp-action="Compete" asp-route-id=@test.Id class="btn btn-info float-right ml-3">Compete</a>
+                    @if (!test.IsCompleted && test.IsDateInValidRange)
+                    {
+                      <a asp-controller="Tests" asp-action="Compete" asp-route-id=@test.Id class="btn btn-info float-right ml-3">Compete</a>
+                    }
                 </td>
             </tr>
         }

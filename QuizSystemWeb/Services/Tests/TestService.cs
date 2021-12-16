@@ -1,5 +1,6 @@
 ﻿namespace QuizSystemWeb.Services.Tests
 {
+    using Newtonsoft.Json;
     using QuizSystemWeb.Data;
     using QuizSystemWeb.Data.Entities;
     using QuizSystemWeb.Services.Questions.Models;
@@ -111,14 +112,19 @@
             {
                 Id = x.Id,
                 Name = x.Name,
+                IsActive=x.IsActive
             })
               .ToList();
 
             return allTests;
         }
 
-        public IEnumerable<ActiveTestsListingServiceModel> GetAllActiveTests()
+        public IEnumerable<ActiveTestsListingServiceModel> GetAllActiveTests(string userId)
         {
+            var completedTestsIds = this.CompletedTests(userId).Select(x => x.Id).ToList();
+
+            var dateNow = DateTime.Now;
+
             var allTests = data.Tests.Where(x => x.IsActive == true).Select(x => new ActiveTestsListingServiceModel
             {
                 Id = x.Id,
@@ -126,10 +132,56 @@
                 StartDate = x.StartDate.ToString("MM/dd/yyyy"),
                 EndDate = x.EndDate.ToString("MM/dd/yyyy"),
                 Duration = x.Duration.ToString(),
+                IsCompleted=completedTestsIds.Contains(x.Id),
+                IsDateInValidRange=dateNow.CompareTo(x.EndDate) != 1 && dateNow.CompareTo(x.StartDate) != -1 
             })
               .ToList();
 
             return allTests;
+        }
+
+        public void SubmitUserAnswers(string input,string userId)
+        {
+            var test = JsonConvert.DeserializeObject<List<UserAnswersServiceModel>>(input);
+      
+            foreach (var item in test)
+            {
+                var questionId = item.QuestionId;
+                var answerId = item.AnswerId;
+                var text = item.TextAnswer;
+
+                var userAnswer = new UsersAnswers
+                { 
+                    AnswerId=answerId == 0 ? null : answerId,
+                    QuestionId=questionId,
+                    UserId=userId,
+                    AnswerText=text
+                };
+
+                data.UsersAnswers.Add(userAnswer);
+
+            }
+           data.SaveChanges();
+
+            ;
+
+        }
+
+        public IEnumerable<TestServiceModel> CompletedTests(string userId)
+        {
+            var userTests = this.data.UsersAnswers
+                .Where(x => x.UserId == userId)
+                .Select(x => new TestServiceModel
+            {
+                Id = x.Question.TestId,
+                Name=x.Question.Test.Name
+
+            }).Distinct()
+                .ToList();
+
+
+            return userTests;
+
         }
     }
 }

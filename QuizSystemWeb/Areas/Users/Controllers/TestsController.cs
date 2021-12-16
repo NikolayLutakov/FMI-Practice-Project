@@ -1,17 +1,21 @@
 ﻿namespace QuizSystemWeb.Areas.Users.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+    using QuizSystemWeb.Infrastructure;
     using QuizSystemWeb.Services.Questions;
+    using QuizSystemWeb.Services.Tests;
     using System.IO;
     using System.Threading.Tasks;
 
     public class TestsController : UsersController
     {
         private readonly IQuestionService service;
+        private readonly ITestService testService;
 
-        public TestsController(IQuestionService service)
+        public TestsController(IQuestionService service, ITestService testService)
         {
             this.service = service;
+            this.testService = testService;
         }
 
         public IActionResult Compete(int id)
@@ -23,16 +27,28 @@
         [HttpPost]
         public async Task<IActionResult> Compete()
         {
-            string result;
+            string body;
             using (var reader = new StreamReader(Request.Body))
             {
-                var body = reader.ReadToEndAsync();
-                result = body.Result;
+                 body = await reader.ReadToEndAsync();
+
+                ;
+              //  result = body.Result;
                 // Do something
             
             }
             ;
+            testService.SubmitUserAnswers(body,this.User.Id());
+
             return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult Completed()
+        {
+            var completedTests = this.testService.CompletedTests(this.User.Id());
+
+            return View(completedTests);
+
         }
     }
 }

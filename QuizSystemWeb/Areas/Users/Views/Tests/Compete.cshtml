@@ -5,22 +5,35 @@
 <form method="post">
     @foreach (var question in Model.QuestionsList)
     {
+       
 
         <div class="container mb-5">
             <div class="row">
                 <div class="col-12">
                     <p class="fw-bold">@cnt. @question.Content</p>
                     <div>
-                        @foreach (var answer in question.Answers)
+                        @if (question.QuestionType == "Closed")
                         {
+                            @foreach (var answer in question.Answers)
+                            {
 
-                            <label for="@answer.Id" class="box first">
-                                <div class="course">
-                                    <input type="radio" name="@question.Id" id="@answer.Id">
-                                    <span class="subject">@answer.Content</span>
-                                </div>
-                            </label>
+                                <label for="@answer.Id" class="box first">
+                                    <div class="course">
+                                        <input type="radio" name="@question.Id" id="@answer.Id">
+                                        <span class="subject">@answer.Content</span>
+                                    </div>
+                                </label>
+                            }
+
                         }
+                        else
+                        {
+                            <div class="form-group">
+                                <textarea class="form-control" id="@question.Id" rows="5"></textarea>
+                            </div>
+
+                        }
+
                     </div>
                 </div>
 
@@ -38,15 +51,18 @@
     <script>
         async function onClick(event){
             event.preventDefault();
-            console.log('click');
             const inputs = [...document.querySelectorAll('input')].filter(x => x.checked);
-            const params = {};
+            const textInputs = [...document.querySelectorAll('textarea')];
+            const params = [];
             for(let radio of inputs){
-                console.log(radio.name, radio.id);
-                params[radio.name] = radio.id;
+                const answer = { "QuestionId": radio.name , "AnswerId": radio.id };
+                params.push(answer);
+            }
+            for (let text of textInputs) {
+                const answer = { "QuestionId": text.id, "TextAnswer": text.value };
+                params.push(answer);
             }
             const json = JSON.stringify(params);
-            console.log(json);
             const response = await fetch('/Users/Tests/Compete', {
                 method: "post", 
                 headers: {

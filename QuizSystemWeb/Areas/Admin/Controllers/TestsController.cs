@@ -89,7 +89,7 @@
             }
 
 
-            return RedirectToAction("Details",new {id});
+            return RedirectToAction("All");
 
         }
 

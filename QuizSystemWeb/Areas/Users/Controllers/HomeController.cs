@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using QuizSystemWeb.Infrastructure;
 using QuizSystemWeb.Services.Tests;
 
 namespace QuizSystemWeb.Areas.Users.Controllers
@@ -14,7 +15,7 @@ namespace QuizSystemWeb.Areas.Users.Controllers
 
         public IActionResult Index()
         {
-            var model = service.GetAllActiveTests();
+            var model = service.GetAllActiveTests(this.User.Id());
             return View(model);
         }
     }
