@@ -3,10 +3,8 @@
     using QuizSystemWeb.Data;
     using QuizSystemWeb.Data.Entities;
     using QuizSystemWeb.Services.Answers.Models;
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Threading.Tasks;
 
     public class AnswerService : IAnswerService
     {

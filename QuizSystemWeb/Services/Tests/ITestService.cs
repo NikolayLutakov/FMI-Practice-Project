@@ -14,6 +14,8 @@
 
         IEnumerable<TestServiceModel> GetAllTests();
 
+        IEnumerable<ActiveTestsListingServiceModel> GetAllActiveTests();
+
         TestServiceDetailsModel Details(int id);
     }
 }

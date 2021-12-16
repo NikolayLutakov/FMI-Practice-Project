@@ -15,6 +15,7 @@
         public string Content { get; set; }
 
         [Required]
+        [Display(Name = "Correct")]
         public bool IsCorrect { get; set; }
 
         public int QuestionId { get; set; }

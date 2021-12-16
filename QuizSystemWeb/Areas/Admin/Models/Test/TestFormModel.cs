@@ -21,7 +21,6 @@
         public DateTime EndDate { get; set; }
 
         public TimeSpan Duration { get; set; }
-
         public bool IsActive { get; set; }
     }
 }

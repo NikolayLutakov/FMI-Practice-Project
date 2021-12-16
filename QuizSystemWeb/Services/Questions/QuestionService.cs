@@ -88,6 +88,42 @@
             return questions;
         }
 
+        public QuestionsListingServiceModel GetAllTestQuestions(int testId)
+        {
+            var questions = data.Questions
+                .Where(x => x.TestId == testId)
+                .Select(x => new QuestionDetailsServiceModel
+                {
+                    Id = x.Id,
+                    Content = x.Content,
+                    Answers = x.Answers.Select(a => new AnswerDetailsServiceModel
+                    {
+                        Id = a.Id,
+                        Content = a.Content,
+                        IsCorrect = new AnswerSignificanceServiceModel
+                        {
+                            Name = a.IsCorrect.Name,
+                            Value = a.IsCorrect.Value
+                        },
+                        QuestionId = a.QuestionId
+                    })
+                    .ToList(),
+                    Points = x.Points,
+                    QuestionType = x.QuestionType.TypeName,
+                    QuestionTypeId = x.QuestionTypeId,
+                    TestId = x.TestId,
+                    Test = x.Test
+                })
+                .ToList();
+
+            var questionsList = new QuestionsListingServiceModel
+            {
+                QuestionsList = questions
+            };
+
+            return questionsList;
+        }
+
         public QuestionDetailsServiceModel GetQuestionById(int questionId)
         {
             var question = data.Questions

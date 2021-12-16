@@ -1,0 +1,60 @@
+﻿@model QuestionsListingServiceModel
+@{
+    var cnt = 1;
+}
+<form method="post">
+    @foreach (var question in Model.QuestionsList)
+    {
+
+        <div class="container mb-5">
+            <div class="row">
+                <div class="col-12">
+                    <p class="fw-bold">@cnt. @question.Content</p>
+                    <div>
+                        @foreach (var answer in question.Answers)
+                        {
+
+                            <label for="@answer.Id" class="box first">
+                                <div class="course">
+                                    <input type="radio" name="@question.Id" id="@answer.Id">
+                                    <span class="subject">@answer.Content</span>
+                                </div>
+                            </label>
+                        }
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        cnt++;
+    }
+    <div class="col-12">
+        <div class="d-flex justify-content-center"> <button class="btn-primary btn-custom btn-primary-custom px-4 py-2 fw-bold" onclick="onClick(event);"> Submit</button> </div>
+    </div>
+</form>
+
+
+<section>
+    <script>
+        async function onClick(event){
+            event.preventDefault();
+            console.log('click');
+            const inputs = [...document.querySelectorAll('input')].filter(x => x.checked);
+            const params = {};
+            for(let radio of inputs){
+                console.log(radio.name, radio.id);
+                params[radio.name] = radio.id;
+            }
+            const json = JSON.stringify(params);
+            console.log(json);
+            const response = await fetch('/Users/Tests/Compete', {
+                method: "post", 
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: json
+            });
+            document.location = response.url;
+        }
+    </script>
+</section>

@@ -116,5 +116,20 @@
 
             return allTests;
         }
+
+        public IEnumerable<ActiveTestsListingServiceModel> GetAllActiveTests()
+        {
+            var allTests = data.Tests.Where(x => x.IsActive == true).Select(x => new ActiveTestsListingServiceModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                StartDate = x.StartDate.ToString("MM/dd/yyyy"),
+                EndDate = x.EndDate.ToString("MM/dd/yyyy"),
+                Duration = x.Duration.ToString(),
+            })
+              .ToList();
+
+            return allTests;
+        }
     }
 }

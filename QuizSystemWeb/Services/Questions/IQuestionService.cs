@@ -15,6 +15,6 @@
 
         QuestionDetailsServiceModel GetQuestionById(int questionId);
 
-
+        public QuestionsListingServiceModel GetAllTestQuestions(int testId);
     }
 }

@@ -8,7 +8,7 @@
             <th scope="col">Start</th>
             <th scope="col">End</th>
             <th scope="col">Duration</th>
-            <th scope="col">IsActive</th>
+            <th scope="col">Active</th>
             <th scope="col"></th>
         </tr>
     </thead>
@@ -18,7 +18,7 @@
                 <td scope="col">@Model.Name</td>
                 <td scope="col">@Model.StartDate</td>
                 <td scope="col">@Model.EndDate</td>
-                <td scope="col">@Model.Duration</td>
+                <td scope="col">@Model.Duration.Remove(@Model.Duration.IndexOf("."), @Model.Duration.Length - @Model.Duration.IndexOf("."))</td>
                 <td scope="col">@Model.IsActive</td>
 
 
