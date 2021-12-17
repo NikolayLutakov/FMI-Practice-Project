@@ -201,23 +201,26 @@
             var tests = this.data.Results.Where(x => x.Grade == null)
                 .Select(x => new UnvaluatedTestsServiceModel
                 {
+                    ResultId = x.Id,
                     Id = x.TestId,
                     Name = data.Tests.Where(i => i.Id == x.TestId).FirstOrDefault().Name,
                     UserId = x.UserId,
                     Username = data.Users.Where(u => u.Id == x.UserId).FirstOrDefault().UserName,
                     PointsFromClosedQuestions = x.Points,
+                    IsTestEvaluated = x.IsChecked
 
                 }).ToList();
 
             return tests;
         }
 
-        public ICollection<OpenQuestionAnswerServiceModel> GetOpenedAnswersForSolvedTest(string userId, int testId)
+        public ICollection<OpenQuestionAnswerServiceModel> GetOpenedAnswersForSolvedTest(string userId, int testId, int resultId)
         {
             var answers = data.UsersAnswers
                     .Where(ua => ua.UserId == userId && ua.Question.QuestionType.TypeName == "Opened" && ua.Question.TestId == testId)
                     .Select(ua => new OpenQuestionAnswerServiceModel
                     {
+                        ResultId = resultId,
                         QuestionContent = ua.Question.Content,
                         QuestionId = ua.QuestionId,
                         AnswerText = ua.AnswerText,
@@ -226,6 +229,25 @@
                     }).ToList();
 
             return answers;
+        }
+
+        public void AddPointsToResult(string json)
+        {
+            var parameters = JsonConvert.DeserializeObject<AddPointsServiceModel>(json);
+            var result = this.data.Results.Where(x => x.Id == parameters.ResultId).FirstOrDefault();
+            result.Points += parameters.Points;
+            result.IsChecked = true;
+            this.data.Results.Update(result);
+            this.data.SaveChanges();
+        }
+
+        public void AddGradeToResult(string json)
+        {
+            var parameters = JsonConvert.DeserializeObject<AddGradeServiceModel>(json);
+            var result = this.data.Results.Where(x => x.Id == parameters.ResultId).FirstOrDefault();
+            result.Grade = parameters.Grade;
+            this.data.Results.Update(result);
+            this.data.SaveChanges();
         }
     }
 }

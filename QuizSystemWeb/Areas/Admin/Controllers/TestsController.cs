@@ -7,6 +7,8 @@
     using QuizSystemWeb.Services.Tests.Models;
     using System;
     using System.Globalization;
+    using System.IO;
+    using System.Threading.Tasks;
 
     public class TestsController : AdministratorController
     {
@@ -99,10 +101,35 @@
             return View(model);
         }
 
-        public IActionResult CheckOpenedQuestions(string userId, int testId)
+        public IActionResult CheckOpenedQuestions(string userId, int testId, int resultId)
         {
-            var model = service.GetOpenedAnswersForSolvedTest(userId, testId);
+            var model = service.GetOpenedAnswersForSolvedTest(userId, testId, resultId);
             return View(model);
+        }
+
+        [HttpPost]
+        public async void CheckOpenedQuestions()
+        {
+            string body;
+            using (var reader = new StreamReader(Request.Body))
+            {
+                body = await reader.ReadToEndAsync();
+            }
+
+            service.AddPointsToResult(body);
+        }
+
+
+        [HttpPost]
+        public async void WriteGrade()
+        {
+            string body;
+            using (var reader = new StreamReader(Request.Body))
+            {
+                body = await reader.ReadToEndAsync();
+            }
+
+            service.AddGradeToResult(body);
         }
     }
 }

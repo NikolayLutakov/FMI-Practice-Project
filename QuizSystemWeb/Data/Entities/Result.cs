@@ -7,5 +7,6 @@
         public int TestId { get; set; }
         public int Points { get; set; }
         public int? Grade { get; set; }
+        public bool IsChecked { get; set; }
     }
 }

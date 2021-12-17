@@ -24,6 +24,10 @@
 
         ICollection<UnvaluatedTestsServiceModel> GetAllUnvaluatedTests();
 
-        ICollection<OpenQuestionAnswerServiceModel> GetOpenedAnswersForSolvedTest(string userId, int testId);
+        ICollection<OpenQuestionAnswerServiceModel> GetOpenedAnswersForSolvedTest(string userId, int testId, int resultId);
+
+        void AddPointsToResult(string json);
+
+        void AddGradeToResult(string json);
     }
 }

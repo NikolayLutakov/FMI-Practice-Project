@@ -2,6 +2,8 @@
 {
     public class OpenQuestionAnswerServiceModel
     {
+        public int ResultId { get; set; }
+
         public string QuestionContent { get; set; }
 
         public int QuestionId { get; set; }
