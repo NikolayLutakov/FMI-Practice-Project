@@ -1,0 +1,26 @@
+﻿@model ICollection<UnvaluatedTestsServiceModel>
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">User</th>
+            <th scope="col">Points</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var test in Model)
+        {
+            <tr>
+                <td scope="col">@test.Name</td>
+                <td scope="col">@test.Username</td>
+                <td scope="col">@test.PointsFromClosedQuestions</td>
+
+                <a asp-controller="Tests" asp-action="CheckOpenedQuestions" asp-route-testId="@test.Id" asp-route-userId="@test.UserId" class="btn btn-primary float-right ml-3">Check Opened Questions</a>
+                @*<td scope="col">
+                    <a asp-controller="Tests" asp-action="ChangeVisibility" asp-route-id="@test.Id" class="btn alert-danger float-right ml-3">Change Visibility</a>
+                    <a asp-controller="Tests" asp-action="Details" asp-route-id=@test.Id class="btn btn-primary float-right ml-3">Details</a>
+                </td>*@
+            </tr>
+        }
+    </tbody>
+</table>

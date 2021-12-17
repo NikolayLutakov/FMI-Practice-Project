@@ -21,5 +21,9 @@
         IEnumerable<ActiveTestsListingServiceModel> GetAllActiveTests(string userId);
 
         TestServiceDetailsModel Details(int id);
+
+        ICollection<UnvaluatedTestsServiceModel> GetAllUnvaluatedTests();
+
+        ICollection<OpenQuestionAnswerServiceModel> GetOpenedAnswersForSolvedTest(string userId, int testId);
     }
 }

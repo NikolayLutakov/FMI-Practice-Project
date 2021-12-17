@@ -164,7 +164,7 @@
             }
 
             data.SaveChanges();
-            
+
             var results = new Result
             {
                 UserId = userId,
@@ -194,6 +194,38 @@
 
             return userTests;
 
+        }
+
+        public ICollection<UnvaluatedTestsServiceModel> GetAllUnvaluatedTests()
+        {
+            var tests = this.data.Results.Where(x => x.Grade == null)
+                .Select(x => new UnvaluatedTestsServiceModel
+                {
+                    Id = x.TestId,
+                    Name = data.Tests.Where(i => i.Id == x.TestId).FirstOrDefault().Name,
+                    UserId = x.UserId,
+                    Username = data.Users.Where(u => u.Id == x.UserId).FirstOrDefault().UserName,
+                    PointsFromClosedQuestions = x.Points,
+
+                }).ToList();
+
+            return tests;
+        }
+
+        public ICollection<OpenQuestionAnswerServiceModel> GetOpenedAnswersForSolvedTest(string userId, int testId)
+        {
+            var answers = data.UsersAnswers
+                    .Where(ua => ua.UserId == userId && ua.Question.QuestionType.TypeName == "Opened" && ua.Question.TestId == testId)
+                    .Select(ua => new OpenQuestionAnswerServiceModel
+                    {
+                        QuestionContent = ua.Question.Content,
+                        QuestionId = ua.QuestionId,
+                        AnswerText = ua.AnswerText,
+                        MaxPoints = ua.Question.Points,
+                        PointsForAnswer = 0
+                    }).ToList();
+
+            return answers;
         }
     }
 }

@@ -5,7 +5,5 @@
         public const string AreaName = "Admin";
 
         public const string AdministratorRoleName = "Administrator";
-
-
     }
 }

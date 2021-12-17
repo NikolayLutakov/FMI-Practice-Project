@@ -1,0 +1,9 @@
+﻿@model ICollection<OpenQuestionAnswerServiceModel>
+
+@foreach (var item in Model)
+{
+    <span>@item.QuestionContent</span>
+    <div class="form-group">
+        <textarea class="form-control" id="@item.QuestionId" rows="5"  disabled>@item.AnswerText</textarea>
+    </div>
+}

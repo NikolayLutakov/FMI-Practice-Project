@@ -1,12 +1,12 @@
 ﻿namespace QuizSystemWeb.Areas.Admin.Controllers
 {
-   using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc;
     using QuizSystemWeb.Areas.Admin.Models.Test;
     using QuizSystemWeb.Infrastructure;
-   using QuizSystemWeb.Services.Tests;
-   using QuizSystemWeb.Services.Tests.Models;
-   using System;
-   using System.Globalization;
+    using QuizSystemWeb.Services.Tests;
+    using QuizSystemWeb.Services.Tests.Models;
+    using System;
+    using System.Globalization;
 
     public class TestsController : AdministratorController
     {
@@ -52,7 +52,7 @@
 
             var testDto = new TestFormModel
             {
-                Id=test.Id,
+                Id = test.Id,
                 Name = test.Name,
                 StartDate = DateTime.ParseExact(test.StartDate, "MM/dd/yyyy", CultureInfo.InvariantCulture),
                 EndDate = DateTime.ParseExact(test.EndDate, "MM/dd/yyyy", CultureInfo.InvariantCulture),
@@ -72,7 +72,7 @@
                 return View(model);
             }
 
-            if (!(service.Edit(model.Id, model.Name, model.StartDate,model.EndDate,model.Duration)))
+            if (!(service.Edit(model.Id, model.Name, model.StartDate, model.EndDate, model.Duration)))
             {
                 return BadRequest();
             }
@@ -93,6 +93,16 @@
 
         }
 
+        public IActionResult EvaluateTests()
+        {
+            var model = service.GetAllUnvaluatedTests();
+            return View(model);
+        }
 
+        public IActionResult CheckOpenedQuestions(string userId, int testId)
+        {
+            var model = service.GetOpenedAnswersForSolvedTest(userId, testId);
+            return View(model);
+        }
     }
 }
