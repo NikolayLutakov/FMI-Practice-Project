@@ -22,12 +22,12 @@
         {
             var test = data.Tests.FirstOrDefault(x => x.Id == id);
 
-            if (test==null)
+            if (test == null)
             {
                 return false;
             }
 
-            test.IsActive= !test.IsActive;
+            test.IsActive = !test.IsActive;
 
             data.Tests.Update(test);
 
@@ -81,11 +81,11 @@
                 })
                 .FirstOrDefault(x => x.Id == id);
 
-            
+
             return test;
         }
 
-        public bool Edit(int id,string name, DateTime startDate, DateTime endDate, TimeSpan duration)
+        public bool Edit(int id, string name, DateTime startDate, DateTime endDate, TimeSpan duration)
         {
             var test = data.Tests.FirstOrDefault(x => x.Id == id);
 
@@ -112,7 +112,7 @@
             {
                 Id = x.Id,
                 Name = x.Name,
-                IsActive=x.IsActive
+                IsActive = x.IsActive
             })
               .ToList();
 
@@ -132,51 +132,63 @@
                 StartDate = x.StartDate.ToString("MM/dd/yyyy"),
                 EndDate = x.EndDate.ToString("MM/dd/yyyy"),
                 Duration = x.Duration.ToString(),
-                IsCompleted=completedTestsIds.Contains(x.Id),
-                IsDateInValidRange=dateNow.CompareTo(x.EndDate) != 1 && dateNow.CompareTo(x.StartDate) != -1 
+                IsCompleted = completedTestsIds.Contains(x.Id),
+                IsDateInValidRange = dateNow.CompareTo(x.EndDate) != 1 && dateNow.CompareTo(x.StartDate) != -1
             })
               .ToList();
 
             return allTests;
         }
 
-        public void SubmitUserAnswers(string input,string userId)
+        public int SubmitUserAnswers(string input, string userId)
         {
-            var test = JsonConvert.DeserializeObject<List<UserAnswersServiceModel>>(input);
-      
-            foreach (var item in test)
+            var test = JsonConvert.DeserializeObject<SubmitedAnswersJsonServiceModel>(input);
+            var testId = test.TestId;
+            var points = 0;
+            foreach (var item in test.Answers)
             {
                 var questionId = item.QuestionId;
                 var answerId = item.AnswerId;
                 var text = item.TextAnswer;
 
                 var userAnswer = new UsersAnswers
-                { 
-                    AnswerId=answerId == 0 ? null : answerId,
-                    QuestionId=questionId,
-                    UserId=userId,
-                    AnswerText=text
+                {
+                    AnswerId = answerId == 0 ? null : answerId,
+                    QuestionId = questionId,
+                    UserId = userId,
+                    AnswerText = text
                 };
 
                 data.UsersAnswers.Add(userAnswer);
-
+                points += data.Questions.Where(x => x.Answers.Any(x => x.Id == answerId && x.IsCorrect.Value == true && x.Question.Test.Id == testId)).Select(x => x.Points).FirstOrDefault();
             }
-           data.SaveChanges();
 
-            ;
+            data.SaveChanges();
+            
+            var results = new Result
+            {
+                UserId = userId,
+                TestId = testId,
+                Points = points
+            };
 
+            data.Results.Add(results);
+            data.SaveChanges();
+            return points;
         }
 
         public IEnumerable<TestServiceModel> CompletedTests(string userId)
         {
-            var userTests = this.data.UsersAnswers
+            var userTests = this.data.Results
                 .Where(x => x.UserId == userId)
                 .Select(x => new TestServiceModel
-            {
-                Id = x.Question.TestId,
-                Name=x.Question.Test.Name
+                {
+                    Id = x.TestId,
+                    Name = data.Tests.Where(i => i.Id == x.TestId).FirstOrDefault().Name,
+                    Points = data.Results.Where(i => i.TestId == x.TestId && x.UserId == userId).FirstOrDefault() == null ? 0 : data.Results.Where(i => i.TestId == x.TestId && x.UserId == userId).FirstOrDefault().Points,
+                    Grade = data.Results.Where(i => i.TestId == x.TestId && x.UserId == userId).FirstOrDefault() == null ? null : data.Results.Where(i => i.TestId == x.TestId && x.UserId == userId).FirstOrDefault().Grade
 
-            }).Distinct()
+                }).Distinct()
                 .ToList();
 
 

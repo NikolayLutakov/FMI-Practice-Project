@@ -3,10 +3,10 @@
     var cnt = 1;
 }
 <form method="post">
+    <input id="testId" type="hidden" value="@Model.QuestionsList.First().TestId"/>
+    <input id="duration" type="hidden" value="@Model.QuestionsList.First().Test.Duration"/>
     @foreach (var question in Model.QuestionsList)
     {
-       
-
         <div class="container mb-5">
             <div class="row">
                 <div class="col-12">
@@ -53,16 +53,21 @@
             event.preventDefault();
             const inputs = [...document.querySelectorAll('input')].filter(x => x.checked);
             const textInputs = [...document.querySelectorAll('textarea')];
-            const params = [];
+            const testId = document.getElementById('testId').value;
+            const params = {
+                "TestId": testId,
+                "Answers": []
+            };
             for(let radio of inputs){
-                const answer = { "QuestionId": radio.name , "AnswerId": radio.id };
-                params.push(answer);
+                const answer = { "QuestionId": radio.name , "AnswerId": radio.id};
+                params.Answers.push(answer);
             }
             for (let text of textInputs) {
-                const answer = { "QuestionId": text.id, "TextAnswer": text.value };
-                params.push(answer);
+                const answer = { "QuestionId": text.id, "TextAnswer": text.value};
+                params.Answers.push(answer);
             }
             const json = JSON.stringify(params);
+            console.log(params);
             const response = await fetch('/Users/Tests/Compete', {
                 method: "post", 
                 headers: {
@@ -70,7 +75,10 @@
                 },
                 body: json
             });
-            document.location = response.url;
+            const points = await response.json();
+            
+            alert(`Your points are: ${points}`);
+            document.location = '/Users/Home/Index';
         }
     </script>
 </section>

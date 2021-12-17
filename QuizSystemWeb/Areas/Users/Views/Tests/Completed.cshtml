@@ -4,7 +4,9 @@
     <thead class="thead-dark">
         <tr>
             <th scope="col">Name</th>
-            <th scope="col"></th>
+            <th scope="col">Points</th>
+            <th scope="col">Grade</th>
+            @*<th scope="col"></th>*@
         </tr>
     </thead>
     <tbody>
@@ -12,11 +14,12 @@
         {
             <tr>
                 <td scope="col">@test.Name</td>
+                <td scope="col">@test.Points</td>
+                <td scope="col">@test.Grade</td>
 
-
-                <td scope="col">
+                @*<td scope="col">
                     <a asp-controller="Tests" asp-action="Details" asp-route-id=@test.Id class="btn btn-primary float-right ml-3">Details</a>
-                </td>
+                </td>*@
             </tr>
         }
     </tbody>

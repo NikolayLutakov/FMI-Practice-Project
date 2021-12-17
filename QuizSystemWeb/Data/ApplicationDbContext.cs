@@ -14,6 +14,8 @@
          public DbSet<Test> Tests { get; set; }
          public DbSet<UsersAnswers> UsersAnswers { get; set; }
 
+        public DbSet<Result> Results { get; set; }
+
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

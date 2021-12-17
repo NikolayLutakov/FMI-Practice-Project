@@ -6,7 +6,7 @@
 
     public interface ITestService
     {
-        void SubmitUserAnswers(string input,string userId);
+        int SubmitUserAnswers(string input, string userId);
 
         bool Create(string name, DateTime startDate, DateTime endDate, TimeSpan duration, string authorId);
 

@@ -12,5 +12,7 @@
         public int AnswerId { get; set; }
 
         public string TextAnswer { get; set; }
+
+        public int TestId { get; set; }
     }
 }

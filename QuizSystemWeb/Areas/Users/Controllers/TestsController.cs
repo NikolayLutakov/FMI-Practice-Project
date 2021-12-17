@@ -25,22 +25,17 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> Compete()
+        public async Task<int> Compete()
         {
             string body;
             using (var reader = new StreamReader(Request.Body))
             {
                  body = await reader.ReadToEndAsync();
-
-                ;
-              //  result = body.Result;
-                // Do something
-            
             }
-            ;
-            testService.SubmitUserAnswers(body,this.User.Id());
+            
+            int points = testService.SubmitUserAnswers(body, this.User.Id());
 
-            return RedirectToAction("Index", "Home");
+            return points;
         }
 
         public IActionResult Completed()
