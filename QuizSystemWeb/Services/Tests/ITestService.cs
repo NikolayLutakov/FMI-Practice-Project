@@ -24,6 +24,10 @@
 
         ICollection<UnvaluatedTestsServiceModel> GetAllUnvaluatedTests();
 
+        ICollection<EvaluatedTestsServiceModel> GetAllEvaluatedTests();
+
+        ICollection<TestCheckAnswersServiceModel> CheckTest(int testId,string userId);
+
         ICollection<OpenQuestionAnswerServiceModel> GetOpenedAnswersForSolvedTest(string userId, int testId, int resultId);
 
         void AddPointsToResult(string json);

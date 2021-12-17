@@ -66,9 +66,9 @@
                 {
                     Id = x.Id,
                     Name = x.Name,
-                    StartDate = x.StartDate.ToString("MM/dd/yyyy"),
-                    EndDate = x.EndDate.ToString("MM/dd/yyyy"),
-                    Duration = x.Duration.ToString(),
+                    StartDate = x.StartDate,
+                    EndDate = x.EndDate,
+                    Duration = x.Duration,
                     IsActive = x.IsActive,
                     AuthorId = x.AuthorId,
                     Author = x.Author,
@@ -125,13 +125,13 @@
 
             var dateNow = DateTime.Now;
 
-            var allTests = data.Tests.Where(x => x.IsActive == true).Select(x => new ActiveTestsListingServiceModel
+            var allTests = data.Tests.Where(x => x.IsActive == true && x.Questions.Count() > 0).Select(x => new ActiveTestsListingServiceModel
             {
                 Id = x.Id,
                 Name = x.Name,
-                StartDate = x.StartDate.ToString("MM/dd/yyyy"),
-                EndDate = x.EndDate.ToString("MM/dd/yyyy"),
-                Duration = x.Duration.ToString(),
+                StartDate = x.StartDate,
+                EndDate = x.EndDate,
+                Duration = x.Duration,
                 IsCompleted = completedTestsIds.Contains(x.Id),
                 IsDateInValidRange = dateNow.CompareTo(x.EndDate) != 1 && dateNow.CompareTo(x.StartDate) != -1
             })
@@ -248,6 +248,40 @@
             result.Grade = parameters.Grade;
             this.data.Results.Update(result);
             this.data.SaveChanges();
+        }
+
+        public ICollection<EvaluatedTestsServiceModel> GetAllEvaluatedTests()
+        {
+            var tests = this.data.Results.Where(x => x.Grade != null)
+               .Select(x => new EvaluatedTestsServiceModel
+               {
+                  Name= data.Tests.Where(i => i.Id == x.TestId).FirstOrDefault().Name,
+                  Username= data.Users.Where(u => u.Id == x.UserId).FirstOrDefault().UserName,
+                  Grade=x.Grade.Value,
+                  Points=x.Points
+               }).ToList();
+
+            return tests;
+
+        }
+
+        public ICollection<TestCheckAnswersServiceModel> CheckTest(int testId, string userId)
+        {
+            var test = this.data.UsersAnswers
+                .Where(x => x.Question.TestId == testId && x.Question.QuestionType.TypeName == "Closed")
+                .Select(x => new TestCheckAnswersServiceModel
+                {
+                    QuestionId = x.QuestionId,
+                    QuestionContent=x.Question.Content,
+                    CorrectAnswerId = x.Question.Answers.FirstOrDefault(x => x.IsCorrect.Value == true).Id,
+                    CorrectAnswerContent= x.Question.Answers.FirstOrDefault(x => x.IsCorrect.Value == true).Content,
+                    MyAnswerId = x.AnswerId.Value,
+                    MyAnswerContent=x.Answer.Content
+
+                })
+                .ToList();
+
+            return test;
         }
     }
 }

@@ -2,6 +2,7 @@
 {
     using QuizSystemWeb.Data.Entities;
     using QuizSystemWeb.Services.Questions.Models;
+    using System;
     using System.Collections.Generic;
 
     public class TestServiceDetailsModel
@@ -10,11 +11,11 @@
 
         public string Name { get; set; }
 
-        public string StartDate { get; set; }
+        public DateTime StartDate { get; set; }
 
-        public string EndDate { get; set; }
+        public DateTime EndDate { get; set; }
 
-        public string Duration { get; set; }
+        public TimeSpan Duration { get; set; }
 
         public bool IsActive { get; set; }
 

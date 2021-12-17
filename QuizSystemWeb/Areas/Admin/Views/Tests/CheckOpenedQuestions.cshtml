@@ -1,4 +1,8 @@
 ﻿@model ICollection<OpenQuestionAnswerServiceModel>
+
+    <div class="mb-3">
+        <a class="btn btn-light" asp-controller="Tests" asp-action="EvaluateTests">Back</a>
+    </div>
 <input type="hidden" id="resultId" value="@Model.First().ResultId"/>
 @foreach (var item in Model)
 {

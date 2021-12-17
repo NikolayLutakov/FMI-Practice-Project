@@ -29,7 +29,13 @@
         {
             var authorId = this.User.Id();
 
-            service.Create(model.Name, model.StartDate, model.EndDate, model.Duration, authorId);
+            var succesfullyCreated = service.Create(model.Name, model.StartDate, model.EndDate, model.Duration, authorId);
+
+            if (!succesfullyCreated)
+            {
+                return BadRequest();
+            }
+
             return RedirectToAction("All");
         }
 
@@ -56,9 +62,9 @@
             {
                 Id = test.Id,
                 Name = test.Name,
-                StartDate = DateTime.ParseExact(test.StartDate, "MM/dd/yyyy", CultureInfo.InvariantCulture),
-                EndDate = DateTime.ParseExact(test.EndDate, "MM/dd/yyyy", CultureInfo.InvariantCulture),
-                Duration = TimeSpan.Parse(test.Duration),
+                StartDate = test.StartDate,
+                EndDate = test.EndDate,
+                Duration = test.Duration,
             };
 
 
@@ -130,6 +136,14 @@
             }
 
             service.AddGradeToResult(body);
+        }
+
+
+        public IActionResult EvaluatedTests()
+        {
+            var evaluatedTests = this.service.GetAllEvaluatedTests();
+
+            return View(evaluatedTests);
         }
     }
 }
