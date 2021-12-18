@@ -5,6 +5,7 @@
     using QuizSystemWeb.Services.Answers;
     using QuizSystemWeb.Services.Answers.Models;
     using QuizSystemWeb.Services.Questions.Models;
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -118,6 +119,7 @@
 
             var questionsList = new QuestionsListingServiceModel
             {
+                DeadLine = DateTime.Now + data.Tests.Where(x => x.Id == testId).FirstOrDefault().Duration,
                 QuestionsList = questions
             };
 

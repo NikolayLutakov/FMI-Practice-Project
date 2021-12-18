@@ -4,6 +4,7 @@
     using QuizSystemWeb.Infrastructure;
     using QuizSystemWeb.Services.Questions;
     using QuizSystemWeb.Services.Tests;
+    using System;
     using System.IO;
     using System.Threading.Tasks;
 
@@ -18,9 +19,11 @@
             this.testService = testService;
         }
 
+       
         public IActionResult Compete(int id)
         {
             var model = questionService.GetAllTestQuestions(id);
+
             return View(model);
         }
 

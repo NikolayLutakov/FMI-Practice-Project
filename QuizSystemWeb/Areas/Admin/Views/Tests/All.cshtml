@@ -17,7 +17,7 @@
         {
             <tr>
                 <td scope="col">@test.Name</td>
-                <td scope="col">@test.IsActive</td>
+                <td scope="col">@(test.IsActive == true ? "Yes" : "No")</td>
 
 
                 <td scope="col">
