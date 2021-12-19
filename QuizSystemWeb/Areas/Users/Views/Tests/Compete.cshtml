@@ -1,8 +1,10 @@
 ﻿@model QuestionsListingServiceModel
-@{
+@{      
+    Layout = "CompeteLayout";
+    ViewData["Title"] = "Compete";
     var cnt = 1;
 }
-
+<h1 class="text-center text-primary">@Model.QuestionsList.First().Test.Name</h1>
 <input id="testId" type="hidden" value="@Model.QuestionsList.First().TestId" />
 <input id="duration" type="hidden" value="@Model.DeadLine.ToString("s")" />
 <div class="timer mb-5"><span>Time left: </span><span id="timer"></span></div>
