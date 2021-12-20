@@ -44,6 +44,17 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+            @if (this.TempData.ContainsKey(WebConstants.GlobalErrorMessageKey))
+            {
+              <div class="alert alert-danger text-center" role="alert"><h5>@this.TempData[WebConstants.GlobalErrorMessageKey]</h5></div>
+                
+
+            }
+
+            @if (this.TempData.ContainsKey(WebConstants.GlobalMessageKey))
+            {
+                <div class="alert alert-success text-center" role="alert"><h5>@this.TempData[WebConstants.GlobalMessageKey]</h5></div>
+            }
             @RenderBody()
         </main>
     </div>

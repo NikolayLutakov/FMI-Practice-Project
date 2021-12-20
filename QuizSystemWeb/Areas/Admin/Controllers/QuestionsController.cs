@@ -29,6 +29,8 @@
         {
             questionService.Create(model.Content, model.Points, model.QuestionType, model.TestId);
 
+            this.TempData[WebConstants.GlobalMessageKey] = "Question was succesfully added to test!";
+
             return RedirectToAction("Details", "Tests",new { Id=model.TestId });
         }
 
@@ -66,7 +68,11 @@
 
             if (!(questionService.Edit(model.Id, model.Content, model.QuestionType,model.Points)))
             {
-                return BadRequest();
+                this.TempData[WebConstants.GlobalErrorMessageKey] = "Can not edit question because question type is invalid!";
+            }
+            else
+            {
+                this.TempData[WebConstants.GlobalMessageKey] = "Question was succesfully edited!";
             }
             ;
             return RedirectToAction("Details", "Questions", new { id = model.Id });

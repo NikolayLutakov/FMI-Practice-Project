@@ -34,7 +34,11 @@
 
             if (!(answerService.Create(model.QuestionId, model.Content, model.IsCorrect)))
             {
-                return BadRequest();
+                this.TempData[WebConstants.GlobalErrorMessageKey] = "Can not create correct answer because correct answer already exists!";
+            }
+            else
+            {
+                this.TempData[WebConstants.GlobalMessageKey] = "Answer was succesfully added to question!";
             }
            
             return RedirectToAction("Details", "Questions", new { Id = model.QuestionId });
@@ -69,7 +73,11 @@
 
             if (!(answerService.Edit(answerId, content, isCorrect)))
             {
-                return BadRequest();
+                this.TempData[WebConstants.GlobalErrorMessageKey] = "Can not edit answer to correct answer because correct answer already exists!";
+            }
+            else
+            {
+                this.TempData[WebConstants.GlobalMessageKey] = "Answer was succesfully edited";
             }
             ;
             return RedirectToAction("Details", "Questions", new { id = model.QuestionId });

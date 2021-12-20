@@ -33,7 +33,11 @@
 
             if (!succesfullyCreated)
             {
-                return BadRequest();
+                this.TempData[WebConstants.GlobalErrorMessageKey] = "Can not create test because start date must be earlier than end date!";
+            }
+            else
+            {
+                this.TempData[WebConstants.GlobalMessageKey] = "Test was succesfully created!";
             }
 
             return RedirectToAction("All");
@@ -82,7 +86,11 @@
 
             if (!(service.Edit(model.Id, model.Name, model.StartDate, model.EndDate, model.Duration)))
             {
-                return BadRequest();
+                this.TempData[WebConstants.GlobalErrorMessageKey] = "Can not edit test because start date must be earlier than end date!";
+            }
+            else
+            {
+                this.TempData[WebConstants.GlobalMessageKey] = "Test was succesfully edited!";
             }
             ;
             return RedirectToAction("Details", "Tests", new { id = model.Id });
@@ -93,7 +101,11 @@
         {
             if (!this.service.ChangeVisibility(id))
             {
-                return NotFound();
+                this.TempData[WebConstants.GlobalErrorMessageKey] = "Test does not exists!";
+            }
+            else
+            {
+                this.TempData[WebConstants.GlobalMessageKey] = "Succesfully changed visibility of test!";
             }
 
 
